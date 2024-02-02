@@ -28,3 +28,16 @@ func TestSumAll(t *testing.T) {
 		t.Errorf("got %v, want %v", got, want)
 	}
 }
+
+func TestSumAllTails(t *testing.T) {
+
+	t.Run("sums of slices tails", func (t *testing.T) {
+	got := SumAllTails([]int{1, 2}, []int{3, 4})
+	want := []int{2, 4}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got %v, want %v", got, want)
+	}
+	})
+
+}
