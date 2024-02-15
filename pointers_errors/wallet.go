@@ -28,9 +28,11 @@ func (b Bitcoin) String() string {
 	return fmt.Sprintf("%d BTC", b)
 }
 
+var ErrInsufficientBalance = errors.New("Insufficient balance")
+
 func (w *Wallet) Withdraw(amount Bitcoin) error {
 	if amount > w.Balance() {
-		return errors.New("Not enough balance")
+		return ErrInsufficientBalance
 	}
 	w.balance -= amount
 
