@@ -1,6 +1,9 @@
 package pointerserrors
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type Bitcoin int
 
@@ -25,6 +28,11 @@ func (b Bitcoin) String() string {
 	return fmt.Sprintf("%d BTC", b)
 }
 
-func (w *Wallet) Withdraw(amount Bitcoin) {
+func (w *Wallet) Withdraw(amount Bitcoin) error {
+	if amount > w.Balance() {
+		return errors.New("Not enough balance")
+	}
 	w.balance -= amount
+
+	return nil
 }
