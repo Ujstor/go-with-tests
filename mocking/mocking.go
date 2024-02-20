@@ -7,31 +7,40 @@ import (
 	"time"
 )
 
+const (
+	countdownStart = 3
+	finalWord = "Go!"
+	write = "write"
+	sleep = "sleep"
+)
+
 type Sleeper interface {
 	Sleep()
 }
 
-type SpySleeper struct {
-	Calls int
+type SpyCountdownOperator struct {
+	Calls []string 
 }
 
 type DefaultSleeper struct{}
 
-func (s *SpySleeper) Sleep() {
-	s.Calls++
+
+func (s *SpyCountdownOperator) Sleep() {
+	s.Calls = append(s.Calls, sleep)
+}
+
+func (s *SpyCountdownOperator) Write(p []byte) (n int, err error){
+	s.Calls = append(s.Calls, write)
+	return
 }
 
 func (s *DefaultSleeper) Sleep() {
 	time.Sleep(1 * time.Second)
 }
 
-const (
-	countdownstart = 3
-	finalWord = "Go!"
-)
 
 func Countdown(out io.Writer, sleeper Sleeper) {
-	for i := countdownstart; i > 0; i-- {
+	for i := countdownStart; i > 0; i-- {
 		fmt.Fprintln(out, i)
 		sleeper.Sleep()
 	}
@@ -40,6 +49,8 @@ func Countdown(out io.Writer, sleeper Sleeper) {
 }
 
 func main() {
+
 	defaultSleeper := &DefaultSleeper{}
 	Countdown(os.Stdout, defaultSleeper)
+
 }
